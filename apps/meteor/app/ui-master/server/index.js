@@ -148,6 +148,16 @@ injectIntoBody(
 <noscript style="color: white; text-align:center">
 	You need to enable JavaScript to run this app.
 </noscript>
+
+<script src="/univer.full.umd.js"></script>
+<script src="/en-US.js"></script>
+<link rel="stylesheet" href="/univer.css">
+<script src="/lodash.js"></script>
+<script src="/collaboration.js"></script>
+<script src="/collaboration-client.js"></script>
+<link rel="stylesheet" href="/collaboration-client.css">
+ <script src="/create-univer.js"></script>
+
 <div id="react-root">
 	<div class="page-loading" role="alert" aria-busy="true" aria-live="polite" aria-label="loading">
 		<div class="loading__animation">
@@ -159,5 +169,3 @@ injectIntoBody(
 </div>
 `,
 );
-
-injectIntoBody('icons', await Assets.getTextAsync('public/icons.svg'));

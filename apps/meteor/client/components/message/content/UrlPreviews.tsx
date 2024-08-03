@@ -81,9 +81,31 @@ const isValidPreviewMeta = ({
 
 const hasMeta = (url: OembedUrlLegacy): url is { url: string; meta: Record<string, string> } => !!url.meta && !!Object.values(url.meta);
 
+function isUniverURL(url: string) {
+	// Define a regular expression to match URLs with univer.ai and univer.plus domain names
+	const regex = /https:\/\/(?:[\w.-]+\.)?univer\.(ai|plus)\/unit\/(\d+)\/([a-zA-Z0-9_-]+)/;
+	const match = url.match(regex);
+
+	if (match) {
+		const type = Number.parseInt(match[2], 10);
+		const id = match[3];
+		return { type, id };
+	}
+
+	return null;
+}
+
 const processMetaAndHeaders = (url: OembedUrlLegacy): PreviewData | false => {
 	if (!url.headers && !url.meta) {
 		return false;
+	}
+
+	// support univer.ai and univer.plus
+	if (isUniverURL(url.url)) {
+		return {
+			type: 'headers',
+			data: { url: url.url, type: 'sheet', originalType: 'univer' },
+		};
 	}
 
 	const data = hasMeta(url) ? normalizeMeta(url) : undefined;
