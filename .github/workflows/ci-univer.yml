@@ -176,3 +176,15 @@ jobs:
           registry: "univer-acr-registry.cn-shenzhen.cr.aliyuncs.com"
           namespace: "univer"
           aliyun: 'yes'
+
+  deploy-k8s:
+    name: DeployK8s
+    runs-on: ubuntu-20.04
+    needs: [build-docker-preview]
+    steps:
+      - uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          repository: dream-num/helm-chart-private
+          event-type: dispatch-rocketchat
+          client-payload: '{"image":"univer-acr-registry-vpc.cn-shenzhen.cr.aliyuncs.com/univer/rocket.chat:${{ needs.release-versions.outputs.gh-docker-tag }}"}'
