@@ -8,6 +8,12 @@ inputs:
     required: true
   release:
     required: true
+  registry:
+    required: false
+    default: ghcr.io
+  namespace:
+    required: false
+    default: ""
   username:
     required: false
   password:
@@ -34,9 +40,13 @@ runs:
       run: |
         cd ${{ inputs.root-dir }}
 
-        LOWERCASE_REPOSITORY=$(echo "${{ github.repository_owner }}" | tr "[:upper:]" "[:lower:]")
+        if [[ "${{ inputs.namespace }}" == "" ]]; then
+          NAMESPACE=$(echo "${{ github.repository_owner }}" | tr "[:upper:]" "[:lower:]")
+        else
+          NAMESPACE="${{ inputs.namespace }}"
+        fi;
 
-        IMAGE_NAME_BASE="ghcr.io/${LOWERCASE_REPOSITORY}/rocket.chat:${{ inputs.docker-tag }}"
+        IMAGE_NAME_BASE="${{ inputs.registry }}/${NAMESPACE}/rocket.chat:${{ inputs.docker-tag }}"
 
         IMAGE_NAME="${IMAGE_NAME_BASE}.${{ inputs.release }}"
 
@@ -68,7 +78,7 @@ runs:
       if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop'
       uses: docker/login-action@v2
       with:
-        registry: ghcr.io
+        registry: ${{ inputs.registry }}
         username: ${{ inputs.username }}
         password: ${{ inputs.password }}
 
