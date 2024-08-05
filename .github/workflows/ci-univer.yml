@@ -187,4 +187,4 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           repository: dream-num/helm-chart-private
           event-type: dispatch-rocketchat
-          client-payload: '{"image":"univer-acr-registry-vpc.cn-shenzhen.cr.aliyuncs.com/univer/rocket.chat:${{ needs.release-versions.outputs.gh-docker-tag }}"}'
+          client-payload: '{"image":"univer-acr-registry-vpc.cn-shenzhen.cr.aliyuncs.com/univer/rocket.chat:${{ needs.release-versions.outputs.gh-docker-tag }}.preview"}'
