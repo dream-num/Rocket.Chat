@@ -18,6 +18,9 @@ inputs:
     required: false
   password:
     required: false
+  aliyun:
+    required: false
+    default: "no"
 
 outputs:
   image-name:
@@ -69,30 +72,39 @@ runs:
         fi;
 
         echo "Build ${{ inputs.release }} Docker image"
-        docker build -t $IMAGE_NAME .
+        # docker build -t $IMAGE_NAME .
 
         echo "image-name-base=${IMAGE_NAME_BASE}" >> $GITHUB_OUTPUT
         echo "image-name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
 
     - name: Login to GitHub Container Registry
-      if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop'
+      if: (github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop') && inputs.aliyun == 'no'
       uses: docker/login-action@v2
       with:
         registry: ${{ inputs.registry }}
         username: ${{ inputs.username }}
         password: ${{ inputs.password }}
 
-    - name: Publish image
-      shell: bash
-      if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop'
-      run: |
-        echo "Push Docker image: ${{ steps.build-image.outputs.image-name }}"
+    - name: Login to Aliyun Container Registry (ACR)
+      uses: aliyun/acr-login@v1
+      if: (github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop') && inputs.aliyun == 'yes'
+      with:
+        login-server: ${{ inputs.registry }}
+        region-id: cn-shenzhen
+        username: "${{ inputs.username }}"
+        password: "${{ inputs.password }}"
 
-        docker push ${{ steps.build-image.outputs.image-name }}
+    # - name: Publish image
+    #   shell: bash
+    #   if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'release' || github.ref == 'refs/heads/develop'
+    #   run: |
+    #     echo "Push Docker image: ${{ steps.build-image.outputs.image-name }}"
 
-        if [[ '${{ inputs.release }}' = 'official' ]]; then
-          echo "Push release official without variant"
+    #     docker push ${{ steps.build-image.outputs.image-name }}
 
-          docker tag ${{ steps.build-image.outputs.image-name }} ${{ steps.build-image.outputs.image-name-base }}
-          docker push ${{ steps.build-image.outputs.image-name-base }}
-        fi;
+    #     if [[ '${{ inputs.release }}' = 'official' ]]; then
+    #       echo "Push release official without variant"
+
+    #       docker tag ${{ steps.build-image.outputs.image-name }} ${{ steps.build-image.outputs.image-name-base }}
+    #       docker push ${{ steps.build-image.outputs.image-name-base }}
+    #     fi;
