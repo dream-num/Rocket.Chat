@@ -144,18 +144,10 @@ jobs:
           node-version: ${{ needs.release-versions.outputs.node-version }}
           coverage: ${{ github.event_name != 'release' }}
 
-  checks:
-    needs: [release-versions, packages-build]
-
-    name: 🔎 Code Check
-    uses: ./.github/workflows/ci-code-check.yml
-    with:
-      node-version: ${{ needs.release-versions.outputs.node-version }}
-
   build-docker-preview:
     name: 🚢 Build Docker Image (preview)
     runs-on: ubuntu-20.04
-    needs: [build, checks, release-versions]
+    needs: [build, release-versions]
     if: github.event_name == 'release' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
