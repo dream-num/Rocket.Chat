@@ -100,6 +100,8 @@ runs:
       run: |
         echo "Push Docker image: ${{ steps.build-image.outputs.image-name }}"
 
+        docker image ls
+
         docker push ${{ steps.build-image.outputs.image-name }}
 
         if [[ '${{ inputs.release }}' = 'official' ]]; then

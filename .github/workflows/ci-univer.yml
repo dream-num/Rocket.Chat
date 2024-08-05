@@ -173,6 +173,6 @@ jobs:
           release: preview
           username: ${{ secrets.CR_USER }}
           password: ${{ secrets.CR_PAT }}
-          registry: ${{ secrets.CR_REGISTRY }}
-          namespace: ${{ secrets.CR_NAMESPACE }}
+          registry: "univer-acr-registry.cn-shenzhen.cr.aliyuncs.com"
+          namespace: "univer"
           aliyun: 'yes'
