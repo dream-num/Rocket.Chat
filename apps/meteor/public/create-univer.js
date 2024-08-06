@@ -55,10 +55,12 @@ function createUniver(container, url) {
 	  const univerAPI = UniverFacade.FUniver.newAPI(univer)
 }
 
+const host = window.location.host;
+const isSecure = window.location.protocol === 'https:';
+const httpProtocol = isSecure ? 'https' : 'http';
+const wsProtocol = isSecure ? 'wss' : 'ws';
+
 function createUniverWithCollaboration(container, url) {
-
-	const universerEndpoint = '';
-
     // check if the unit is already created
     const unitInfo = getUnitByURL(url)
     if (unitInfo) {
@@ -93,7 +95,6 @@ function createUniverWithCollaboration(container, url) {
       } = window
 
 	  const {SnapshotService} = UniverCollaboration;
-	  console.info('SnapshotService:::', SnapshotService, unitId, type);
 
       var univer = new UniverCore.Univer({
         theme: UniverDesign.defaultTheme,
@@ -134,10 +135,10 @@ function createUniverWithCollaboration(container, url) {
       const { SNAPSHOT_SERVER_URL_KEY, COLLAB_SUBMIT_CHANGESET_URL_KEY, COLLAB_WEB_SOCKET_URL_KEY, AUTHZ_URL_KEY } = UniverCollaborationClient;
 
       // config collaboration endpoint
-      configService.setConfig(AUTHZ_URL_KEY, `${universerEndpoint}/universer-api/authz`);
-      configService.setConfig(SNAPSHOT_SERVER_URL_KEY, `${universerEndpoint}/universer-api/snapshot`);
-      configService.setConfig(COLLAB_SUBMIT_CHANGESET_URL_KEY, `${universerEndpoint}/universer-api/comb`);
-      configService.setConfig(COLLAB_WEB_SOCKET_URL_KEY, `wss://${universerEndpoint}universer-api/comb/connect`);
+      configService.setConfig(AUTHZ_URL_KEY, `${httpProtocol}://${host}/universer-api/authz`);
+      configService.setConfig(SNAPSHOT_SERVER_URL_KEY, `${httpProtocol}://${host}/universer-api/snapshot`);
+      configService.setConfig(COLLAB_SUBMIT_CHANGESET_URL_KEY, `${httpProtocol}://${host}/universer-api/comb`);
+      configService.setConfig(COLLAB_WEB_SOCKET_URL_KEY, `${wsProtocol}://${host}/universer-api/comb/connect`);
 
       // collaboration
       univer.registerPlugin(UniverCollaboration.UniverCollaborationPlugin);
