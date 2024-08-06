@@ -3,12 +3,14 @@ const customEventElement = document.createElement('div');
 window.customEventElement = customEventElement;
 
 customEventElement.addEventListener("createUniver", (e) => {
+	// createUniver(e.detail.ref, e.detail.url);
 	createUniverWithCollaboration(e.detail.ref, e.detail.url);
 });
 
 
 function createUniver(container, url) {
-	var {
+
+	const {
 		UniverCore,
 		UniverDesign,
 		UniverEngineRender,
@@ -23,7 +25,7 @@ function createUniver(container, url) {
 		UniverFacade,
 	  } = window
 
-	  var univer = new UniverCore.Univer({
+	  const univer = new UniverCore.Univer({
 		theme: UniverDesign.defaultTheme,
 		locale: UniverCore.LocaleType.EN_US,
 		locales: {
@@ -35,9 +37,9 @@ function createUniver(container, url) {
 	  univer.registerPlugin(UniverEngineFormula.UniverFormulaEnginePlugin);
 
 	  univer.registerPlugin(UniverUi.UniverUIPlugin, {
-		container,
-		header: false,
-        footer: false,
+			container,
+			header: true,
+			footer: false,
 	  });
 
 	  univer.registerPlugin(UniverDocs.UniverDocsPlugin, {
@@ -50,9 +52,17 @@ function createUniver(container, url) {
 	  univer.registerPlugin(UniverSheetsNumfmt.UniverSheetsNumfmtPlugin);
 	  univer.registerPlugin(UniverSheetsFormula.UniverSheetsFormulaPlugin);
 
-	  univer.createUnit(UniverCore.UniverInstanceType.UNIVER_SHEET, {})
 
-	  const univerAPI = UniverFacade.FUniver.newAPI(univer)
+		const unitInfo = getUnitByURL(url)
+		if (unitInfo) {
+			const {type,id} = unitInfo;
+
+			if(type === 1){
+				univer.createUnit(UniverCore.UniverInstanceType.UNIVER_DOC, {})
+			}else if(type === 2){
+				univer.createUnit(UniverCore.UniverInstanceType.UNIVER_SHEET, {})
+			}
+		}
 }
 
 const host = window.location.host;
@@ -95,15 +105,16 @@ function createUniverWithCollaboration(container, url) {
       } = window
 
 	  const {SnapshotService} = UniverCollaboration;
+		const {Tools} = UniverCore
 
       var univer = new UniverCore.Univer({
         theme: UniverDesign.defaultTheme,
         locale: UniverCore.LocaleType.EN_US,
         locales: {
-          [UniverCore.LocaleType.EN_US]: {
-            ...UniverUMD['en-US'],
-            ...extLocale
-          },
+          [UniverCore.LocaleType.EN_US]: Tools.deepMerge(
+            UniverUMD['en-US'],
+            extLocale
+          ),
         },
         override: [
           [UniverCore.IAuthzIoService, null],
@@ -120,6 +131,8 @@ function createUniverWithCollaboration(container, url) {
 
       univer.registerPlugin(UniverUi.UniverUIPlugin, {
         container,
+				header: false,
+        footer: false,
       });
 
       univer.registerPlugin(UniverDocsUi.UniverDocsUIPlugin);
@@ -146,10 +159,12 @@ function createUniverWithCollaboration(container, url) {
 				enableAuthServer: true
 			});
 
-			univer.__getInjector().get(SnapshotService).loadSheet(unitId,0)
-
+			if(type === 1){
+				univer.__getInjector().get(SnapshotService).loadDoc(unitId,0)
+			}else if(type === 2){
+				univer.__getInjector().get(SnapshotService).loadSheet(unitId,0)
+			}
     }
-
 }
 
 

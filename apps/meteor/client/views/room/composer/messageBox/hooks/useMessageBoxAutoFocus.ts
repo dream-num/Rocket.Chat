@@ -36,10 +36,11 @@ export const useMessageBoxAutoFocus = (enabled: boolean): Ref<HTMLElement> => {
 			node?.focus();
 		};
 
-		document.addEventListener('keydown', handleKeyDown);
+		// remove handleKeyDown event listener, it was causing the message box to be focused when typing in univer sheet
+		// document.addEventListener('keydown', handleKeyDown);
 
 		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
+			// document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, []);
 
