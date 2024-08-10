@@ -97,9 +97,9 @@ function createUniverWithCollaboration(container, url) {
         UniverUi,
         UniverSheets,
         UniverSheetsUi,
+				UniverSheetsNumfmt:{UniverSheetsNumfmtPlugin},
         UniverCollaboration,
         UniverCollaborationClient,
-        UniverSheetsThreadComment,
         UniverSheetsFormula: { UniverSheetsFormulaPlugin },
       } = window
 
@@ -133,6 +133,9 @@ function createUniverWithCollaboration(container, url) {
 				header: false,
         footer: false,
       });
+
+
+			univer.registerPlugin(UniverSheetsNumfmtPlugin);
 
       univer.registerPlugin(UniverDocsUi.UniverDocsUIPlugin);
 
@@ -183,26 +186,26 @@ function getUnitByURL(url) {
 	return null;
 }
 
+
 function registerRichFeatures(univer){
 	const {
-		UniverSheetsNumfmt: {UniverSheetsNumfmtPlugin},
 		UniverSheetsZenEditor: {UniverSheetsZenEditorPlugin},
 		UniverSheetsFindReplace: {UniverSheetsFindReplacePlugin},
-		UniverSheetsConditionalFormatting: {UniverSheetsConditionalFormattingUIPlugin},
+		UniverSheetsConditionalFormatting: {UniverSheetsConditionalFormattingPlugin},
 		UniverDataValidation: {UniverDataValidationPlugin},
 		UniverSheetsDataValidation: {UniverSheetsDataValidationPlugin},
 		UniverSheetsFilter: {UniverSheetsFilterPlugin},
-		UniverSheetsFilterUI: {UniverSheetsFilterUIPlugin},
-		UniverDrawing: {UniverDrawingUIPlugin},
+		UniverSheetsFilterUi: {UniverSheetsFilterUIPlugin},
+		UniverDrawing: {UniverDrawingPlugin,IImageIoService},
+		UniverDrawingUi: {UniverDrawingUIPlugin},
 		UniverSheetsDrawing: {UniverSheetsDrawingPlugin},
-		UniverSheetsDrawingUI: {UniverSheetsDrawingUIPlugin},
+		UniverSheetsDrawingUi: {UniverSheetsDrawingUIPlugin},
 		UniverSheetsSort: {UniverSheetsSortPlugin},
-		UniverSheetsSortUI: {UniverSheetsSortUIPlugin},
-		UniverSheetsPivotTable: {UniverSheetsPivotTablePlugin},
-		UniverSheetsPivotTableUI: {UniverSheetsPivotTableUIPlugin},
-		UniverSheetsHyperLinkUI: {UniverSheetsHyperLinkUIPlugin},
+		UniverSheetsSortUi: {UniverSheetsSortUIPlugin},
+		UniverSheetsPivot: {UniverSheetsPivotTablePlugin},
+		UniverSheetsPivotUi: {UniverSheetsPivotTableUIPlugin},
+		UniverSheetsHyperLinkUi: {UniverSheetsHyperLinkUIPlugin},
 	} = window;
-	univer.registerPlugin(UniverSheetsNumfmtPlugin);
 	// zen editor
 	univer.registerPlugin(UniverSheetsZenEditorPlugin);
 
@@ -210,7 +213,7 @@ function registerRichFeatures(univer){
 	univer.registerPlugin(UniverSheetsFindReplacePlugin);
 
 	// conditional formatting
-	univer.registerPlugin(UniverSheetsConditionalFormattingUIPlugin);
+	univer.registerPlugin(UniverSheetsConditionalFormattingPlugin);
 
 	// data validation
 	univer.registerPlugin(UniverDataValidationPlugin);
@@ -221,17 +224,22 @@ function registerRichFeatures(univer){
 	univer.registerPlugin(UniverSheetsFilterUIPlugin);
 
 	// drawing
+	univer.registerPlugin(UniverDrawingPlugin, {
+        override: [[IImageIoService, null]],
+    });
 	univer.registerPlugin(UniverDrawingUIPlugin);
-	univer.registerPlugin(UniverSheetsDrawingPlugin);
-	univer.registerPlugin(UniverSheetsDrawingUIPlugin);
+    univer.registerPlugin(UniverSheetsDrawingPlugin);
+    univer.registerPlugin(UniverSheetsDrawingUIPlugin);
 
 	// sort
 	univer.registerPlugin(UniverSheetsSortPlugin);
 	univer.registerPlugin(UniverSheetsSortUIPlugin);
 
 	// pivot table
-	univer.registerPlugin(UniverSheetsPivotTablePlugin);
-	univer.registerPlugin(UniverSheetsPivotTableUIPlugin);
+	// univer.registerPlugin(UniverSheetsPivotTablePlugin,{
+	// 	isServer: true,
+	// });
+	// univer.registerPlugin(UniverSheetsPivotTableUIPlugin);
 
 	univer.registerPlugin(UniverSheetsHyperLinkUIPlugin);
 }
