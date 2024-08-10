@@ -97,7 +97,6 @@ function createUniverWithCollaboration(container, url) {
         UniverUi,
         UniverSheets,
         UniverSheetsUi,
-        UniverSheetsNumfmt,
         UniverCollaboration,
         UniverCollaborationClient,
         UniverSheetsThreadComment,
@@ -140,6 +139,8 @@ function createUniverWithCollaboration(container, url) {
       univer.registerPlugin(UniverSheets.UniverSheetsPlugin);
       univer.registerPlugin(UniverSheetsUi.UniverSheetsUIPlugin);
 
+			registerRichFeatures(univer);
+
       //   pro
       const injector = univer.__getInjector();
       const configService = injector.get(UniverCore.IConfigService);
@@ -180,4 +181,57 @@ function getUnitByURL(url) {
 	}
 
 	return null;
+}
+
+function registerRichFeatures(univer){
+	const {
+		UniverSheetsNumfmt: {UniverSheetsNumfmtPlugin},
+		UniverSheetsZenEditor: {UniverSheetsZenEditorPlugin},
+		UniverSheetsFindReplace: {UniverSheetsFindReplacePlugin},
+		UniverSheetsConditionalFormatting: {UniverSheetsConditionalFormattingUIPlugin},
+		UniverDataValidation: {UniverDataValidationPlugin},
+		UniverSheetsDataValidation: {UniverSheetsDataValidationPlugin},
+		UniverSheetsFilter: {UniverSheetsFilterPlugin},
+		UniverSheetsFilterUI: {UniverSheetsFilterUIPlugin},
+		UniverDrawing: {UniverDrawingUIPlugin},
+		UniverSheetsDrawing: {UniverSheetsDrawingPlugin},
+		UniverSheetsDrawingUI: {UniverSheetsDrawingUIPlugin},
+		UniverSheetsSort: {UniverSheetsSortPlugin},
+		UniverSheetsSortUI: {UniverSheetsSortUIPlugin},
+		UniverSheetsPivotTable: {UniverSheetsPivotTablePlugin},
+		UniverSheetsPivotTableUI: {UniverSheetsPivotTableUIPlugin},
+		UniverSheetsHyperLinkUI: {UniverSheetsHyperLinkUIPlugin},
+	} = window;
+	univer.registerPlugin(UniverSheetsNumfmtPlugin);
+	// zen editor
+	univer.registerPlugin(UniverSheetsZenEditorPlugin);
+
+	// find replace
+	univer.registerPlugin(UniverSheetsFindReplacePlugin);
+
+	// conditional formatting
+	univer.registerPlugin(UniverSheetsConditionalFormattingUIPlugin);
+
+	// data validation
+	univer.registerPlugin(UniverDataValidationPlugin);
+	univer.registerPlugin(UniverSheetsDataValidationPlugin);
+
+	// filter
+	univer.registerPlugin(UniverSheetsFilterPlugin);
+	univer.registerPlugin(UniverSheetsFilterUIPlugin);
+
+	// drawing
+	univer.registerPlugin(UniverDrawingUIPlugin);
+	univer.registerPlugin(UniverSheetsDrawingPlugin);
+	univer.registerPlugin(UniverSheetsDrawingUIPlugin);
+
+	// sort
+	univer.registerPlugin(UniverSheetsSortPlugin);
+	univer.registerPlugin(UniverSheetsSortUIPlugin);
+
+	// pivot table
+	univer.registerPlugin(UniverSheetsPivotTablePlugin);
+	univer.registerPlugin(UniverSheetsPivotTableUIPlugin);
+
+	univer.registerPlugin(UniverSheetsHyperLinkUIPlugin);
 }

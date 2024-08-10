@@ -155,7 +155,11 @@ injectIntoBody(
 <script src="/lodash.js"></script>
 <script src="/collaboration.js"></script>
 <script src="/collaboration-client.js"></script>
+<script src="/pivot-engine.js"></script>
+<script src="/sheets-pivot.js"></script>
+<script src="/sheets-pivot-ui.js"></script>
 <link rel="stylesheet" href="/collaboration-client.css">
+<link rel="stylesheet" href="/sheets-pivot-ui.css">
  <script src="/create-univer.js"></script>
 
 <div id="react-root">
